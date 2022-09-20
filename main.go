@@ -13,12 +13,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func main() {
-	r := gin.Default()
-
+func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
+}
+
+func main() {
+	r := gin.Default()
 
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
 	if err != nil {
