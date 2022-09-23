@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/MountainGator/playlist_CRUD/controllers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -35,6 +36,11 @@ func main() {
 			"msg": "wazzup",
 		})
 	})
+
+
+	r.POST("/login", controllers.UserLogin)
+	r.POST("/create-playlist", controllers.NewPlaylist)
+	r.GET("/find-playlist", controllers.FindPlaylist)
 
 	r.Use(cors.Default())
 	r.Run()
