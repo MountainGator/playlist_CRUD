@@ -6,6 +6,7 @@ import (
 	"github.com/MountainGator/playlist_CRUD/models"
 	"github.com/MountainGator/playlist_CRUD/services"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserController struct {
@@ -34,6 +35,19 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Pwd), 14)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	user.Pwd = string(bytes)
+
+	err = uc.UserService.CreateUser(&user)
+	if err != nil {
+		c.JSON(http.StatusBadGateway, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, user)
 }
 
 func (uc *UserController) UserLogin(c *gin.Context) {

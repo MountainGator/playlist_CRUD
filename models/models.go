@@ -5,6 +5,7 @@ type User struct {
 	Age      int    `json:"age" bson:"age"`
 	Username string `json:"username" bson:"username"`
 	Email    string `json:"email" bson:"email"`
+	Pwd      string `json:"password" bson:"password"`
 }
 
 type Song struct {
