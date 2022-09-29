@@ -43,7 +43,7 @@ func init() {
 	}
 
 	coll = client.Database("playlist_db").Collection("playlist")
-	us = services.NewUserSerice(coll, context.TODO())
+	us = services.NewUserService(coll, context.TODO())
 	uc = controllers.NewUserController(us)
 	pc = controllers.NewPlayController(ps)
 }

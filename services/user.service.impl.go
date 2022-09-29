@@ -27,7 +27,7 @@ func (u *UserServiceImpl) CreateUser(user *models.User) error {
 	_, err := u.usercollection.InsertOne(u.ctx, user)
 	return err
 }
-func (u *UserServiceImpl) UserLogin(name string) (*models.User, error) {
+func (u *UserServiceImpl) UserLogin(name *string) (*models.User, error) {
 	var user *models.User
 	query := bson.D{bson.E{Key: "name", Value: name}}
 	err := u.usercollection.FindOne(u.ctx, query).Decode(&user)
@@ -48,11 +48,15 @@ func (u *UserServiceImpl) UpdateUser(user *models.User) error {
 	}
 	result, _ := u.usercollection.UpdateOne(u.ctx, filter, update)
 	if result.MatchedCount != 1 {
-		return errors.New("no matched document found for update")
+		return errors.New("couldn't find user")
 	}
 	return nil
 }
-func (u *UserServiceImpl) DeleteUser(user *models.User) error {
-	_, err := u.usercollection.InsertOne(u.ctx, user)
-	return err
+func (u *UserServiceImpl) DeleteUser(name *string) error {
+	filter := bson.D{primitive.E{Key: "name", Value: name}}
+	result, _ := u.usercollection.DeleteOne(u.ctx, filter)
+	if result.DeletedCount != 1 {
+		return errors.New("error. could not delete user")
+	}
+	return nil
 }
