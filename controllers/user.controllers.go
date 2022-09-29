@@ -46,13 +46,13 @@ func (uc *UserController) UserLogin(c *gin.Context) {
 
 	c.BindJSON(&user)
 
-	err := uc.UserService.UserLogin(&user.Username, user.Password)
+	err := uc.UserService.UserLogin(&user.Username, user.Password, c)
 
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"invalid password": err.Error()})
 	}
 
-	c.JSON(http.StatusAccepted, gin.H{})
+	c.JSON(http.StatusAccepted, gin.H{"success": "logged in"})
 
 }
 

@@ -2,11 +2,12 @@ package services
 
 import (
 	"github.com/MountainGator/playlist_CRUD/models"
+	"github.com/gin-gonic/gin"
 )
 
 type UserService interface {
 	CreateUser(*models.User) error
-	UserLogin(*string, string) error
+	UserLogin(*string, string, *gin.Context) error
 	UpdateUser(*models.User) error
 	DeleteUser(*string) error
 }

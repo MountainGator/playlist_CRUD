@@ -5,6 +5,8 @@ import (
 	"errors"
 
 	"github.com/MountainGator/playlist_CRUD/models"
+	"github.com/gin-gonic/gin"
+	"github.com/gorilla/sessions"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,12 +15,14 @@ import (
 
 type UserServiceImpl struct {
 	usercollection *mongo.Collection
+	store          *sessions.CookieStore
 	ctx            context.Context
 }
 
-func NewUserService(usercollection *mongo.Collection, ctx context.Context) UserService {
+func NewUserService(usercollection *mongo.Collection, store *sessions.CookieStore, ctx context.Context) UserService {
 	return &UserServiceImpl{
 		usercollection: usercollection,
+		store:          store,
 		ctx:            ctx,
 	}
 }
@@ -28,7 +32,7 @@ func (u *UserServiceImpl) CreateUser(user *models.User) error {
 	_, err := u.usercollection.InsertOne(u.ctx, user)
 	return err
 }
-func (u *UserServiceImpl) UserLogin(name *string, pwd string) error {
+func (u *UserServiceImpl) UserLogin(name *string, pwd string, c *gin.Context) error {
 	var user *models.User
 	query := bson.D{bson.E{Key: "username", Value: name}}
 	if err := u.usercollection.FindOne(u.ctx, query).Decode(&user); err != nil {
@@ -40,6 +44,14 @@ func (u *UserServiceImpl) UserLogin(name *string, pwd string) error {
 	if pwd_err != nil {
 		return pwd_err
 	}
+
+	session, ses_err := u.store.Get(c.Request, "session")
+	if ses_err != nil {
+		return ses_err
+	}
+
+	session.Values["user"] = name
+	session.Save(c.Request, c.Writer)
 	return nil
 }
 func (u *UserServiceImpl) UpdateUser(user *models.User) error {

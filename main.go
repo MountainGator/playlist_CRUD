@@ -11,7 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
-	// "go.mongodb.org/mongo-driver/bson"
+	"github.com/gorilla/sessions"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -27,6 +27,8 @@ var (
 	song_coll *mongo.Collection
 	client    *mongo.Client
 	err       error
+	key       []byte
+	store     *sessions.CookieStore
 )
 
 func init() {
@@ -44,18 +46,37 @@ func init() {
 		log.Fatal("error pinging mongo", err)
 	}
 
+	key = []byte("super-secret-key")
+	store = sessions.NewCookieStore(key)
+
+	store.Options.HttpOnly = false
+	store.Options.Secure = false
+
 	play_coll = client.Database("playlist_db").Collection("playlist")
 	user_coll = client.Database("playlist_db").Collection("users")
 	song_coll = client.Database("playlist_db").Collection("songs")
-	us = services.NewUserService(user_coll, context.TODO())
+	us = services.NewUserService(user_coll, store, context.TODO())
 	ps = services.NewPlaylistService(user_coll, song_coll, context.TODO())
 	uc = controllers.NewUserController(us)
 	pc = controllers.NewPlayController(ps)
 }
 
+func Auth(c *gin.Context) {
+	session, _ := store.Get(c.Request, "session")
+	_, ok := session.Values["user"]
+
+	if !ok {
+		c.JSON(http.StatusForbidden, gin.H{"Error": "Not logged in"})
+		c.Abort()
+		return
+	}
+	c.Next()
+}
+
 func main() {
 	r := gin.Default()
-
+	user_router := r.Group("/user", Auth)
+	play_router := r.Group("/playlist", Auth)
 	if err != nil {
 		panic(err)
 	}
@@ -68,13 +89,13 @@ func main() {
 
 	r.POST("/login", uc.UserLogin)
 	r.POST("/new-user", uc.CreateUser)
-	r.PATCH("/update-user", uc.UpdateUser)
-	r.DELETE("/delete-user", uc.DeleteUser)
-	r.POST("/create-playlist", pc.NewPlaylist)
-	r.GET("/find-playlist", pc.FindPlaylist)
-	r.PATCH("/add-song", pc.AddSong)
-	r.DELETE("/delete-song", pc.DeleteSong)
-	r.DELETE("/delete-playlist", pc.DeletePlaylist)
+	r.GET("/find-playlist/:playlistName", pc.FindPlaylist)
+	user_router.PATCH("/update", uc.UpdateUser)
+	user_router.DELETE("/delete", uc.DeleteUser)
+	play_router.POST("/create", pc.NewPlaylist)
+	play_router.PATCH("/add-song", pc.AddSong)
+	play_router.DELETE("/delete-song", pc.DeleteSong)
+	play_router.DELETE("/delete", pc.DeletePlaylist)
 
 	r.Use(cors.Default())
 	r.Run()
