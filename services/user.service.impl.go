@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserServiceImpl struct {
@@ -27,11 +28,17 @@ func (u *UserServiceImpl) CreateUser(user *models.User) error {
 	_, err := u.usercollection.InsertOne(u.ctx, user)
 	return err
 }
-func (u *UserServiceImpl) UserLogin(name *string) (*models.User, error) {
+func (u *UserServiceImpl) UserLogin(name *string, pwd string) error {
 	var user *models.User
-	query := bson.D{bson.E{Key: "name", Value: name}}
+	query := bson.D{bson.E{Key: "username", Value: name}}
 	err := u.usercollection.FindOne(u.ctx, query).Decode(&user)
-	return user, err
+
+	pwd_err := bcrypt.CompareHashAndPassword([]byte(user.Pwd), []byte(pwd))
+
+	if pwd_err != nil {
+		return pwd_err
+	}
+	return err
 }
 func (u *UserServiceImpl) UpdateUser(user *models.User) error {
 	filter := bson.D{primitive.E{Key: "name", Value: user.Name}}

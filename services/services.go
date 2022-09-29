@@ -6,7 +6,7 @@ import (
 
 type UserService interface {
 	CreateUser(*models.User) error
-	UserLogin(*string) (*models.User, error)
+	UserLogin(*string, string) error
 	UpdateUser(*models.User) error
 	DeleteUser(*string) error
 }
