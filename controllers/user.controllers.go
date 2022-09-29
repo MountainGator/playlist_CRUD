@@ -13,19 +13,9 @@ type UserController struct {
 	UserService services.UserService
 }
 
-type PlaylistController struct {
-	PlaylistService services.PlaylistService
-}
-
 func NewUserController(userservice services.UserService) UserController {
 	return UserController{
 		UserService: userservice,
-	}
-}
-
-func NewPlayController(playservice services.PlaylistService) PlaylistController {
-	return PlaylistController{
-		PlaylistService: playservice,
 	}
 }
 
@@ -73,23 +63,5 @@ func (uc *UserController) UpdateUser(c *gin.Context) {
 }
 
 func (uc *UserController) DeleteUser(c *gin.Context) {
-
-}
-
-func (pc *PlaylistController) NewPlaylist(c *gin.Context) {
-
-}
-
-func (pc *PlaylistController) FindPlaylist(c *gin.Context) {
-
-}
-
-func (pc *PlaylistController) AddSong(c *gin.Context) {
-
-}
-func (pc *PlaylistController) DeleteSong(c *gin.Context) {
-
-}
-func (pc *PlaylistController) DeletePlaylist(c *gin.Context) {
 
 }
