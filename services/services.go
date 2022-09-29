@@ -13,8 +13,8 @@ type UserService interface {
 
 type PlaylistService interface {
 	NewPlaylist(*models.Playlist) error
-	FindPlaylist(*string) error
-	AddSong(*string, *models.Song) error
-	DeleteSong(*string, *string) error
+	FindPlaylist(*string) (*models.Playlist, error)
+	AddSong(*models.Song, *string) error
+	DeleteSong(*string, *string, *string) error
 	DeletePlaylist(*string) error
 }

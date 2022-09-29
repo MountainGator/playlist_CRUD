@@ -18,13 +18,15 @@ import (
 )
 
 var (
-	us     services.UserService
-	ps     services.PlaylistService
-	uc     controllers.UserController
-	pc     controllers.PlaylistController
-	coll   *mongo.Collection
-	client *mongo.Client
-	err    error
+	us        services.UserService
+	ps        services.PlaylistService
+	uc        controllers.UserController
+	pc        controllers.PlaylistController
+	play_coll *mongo.Collection
+	user_coll *mongo.Collection
+	song_coll *mongo.Collection
+	client    *mongo.Client
+	err       error
 )
 
 func init() {
@@ -42,8 +44,11 @@ func init() {
 		log.Fatal("error pinging mongo", err)
 	}
 
-	coll = client.Database("playlist_db").Collection("playlist")
-	us = services.NewUserService(coll, context.TODO())
+	play_coll = client.Database("playlist_db").Collection("playlist")
+	user_coll = client.Database("playlist_db").Collection("users")
+	song_coll = client.Database("playlist_db").Collection("songs")
+	us = services.NewUserService(user_coll, context.TODO())
+	ps = services.NewPlaylistService(user_coll, song_coll, context.TODO())
 	uc = controllers.NewUserController(us)
 	pc = controllers.NewPlayController(ps)
 }
@@ -62,8 +67,14 @@ func main() {
 	})
 
 	r.POST("/login", uc.UserLogin)
+	r.POST("/new-user", uc.CreateUser)
+	r.PATCH("/update-user", uc.UpdateUser)
+	r.DELETE("/delete-user", uc.DeleteUser)
 	r.POST("/create-playlist", pc.NewPlaylist)
 	r.GET("/find-playlist", pc.FindPlaylist)
+	r.PATCH("/add-song", pc.AddSong)
+	r.DELETE("/delete-song", pc.DeleteSong)
+	r.DELETE("/delete-playlist", pc.DeletePlaylist)
 
 	r.Use(cors.Default())
 	r.Run()
