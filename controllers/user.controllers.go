@@ -41,12 +41,8 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 }
 
 func (uc *UserController) UserLogin(c *gin.Context) {
-	type LoginInfo struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
 
-	var user *LoginInfo
+	var user *models.LoginInfo
 
 	c.BindJSON(&user)
 
@@ -55,6 +51,8 @@ func (uc *UserController) UserLogin(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusForbidden, gin.H{"invalid password": err.Error()})
 	}
+
+	c.JSON(http.StatusAccepted, gin.H{})
 
 }
 

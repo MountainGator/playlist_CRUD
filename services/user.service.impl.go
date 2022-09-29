@@ -31,14 +31,16 @@ func (u *UserServiceImpl) CreateUser(user *models.User) error {
 func (u *UserServiceImpl) UserLogin(name *string, pwd string) error {
 	var user *models.User
 	query := bson.D{bson.E{Key: "username", Value: name}}
-	err := u.usercollection.FindOne(u.ctx, query).Decode(&user)
+	if err := u.usercollection.FindOne(u.ctx, query).Decode(&user); err != nil {
+		return err
+	}
 
 	pwd_err := bcrypt.CompareHashAndPassword([]byte(user.Pwd), []byte(pwd))
 
 	if pwd_err != nil {
 		return pwd_err
 	}
-	return err
+	return nil
 }
 func (u *UserServiceImpl) UpdateUser(user *models.User) error {
 	filter := bson.D{primitive.E{Key: "name", Value: user.Name}}
