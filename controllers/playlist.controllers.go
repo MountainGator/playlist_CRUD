@@ -30,7 +30,6 @@ func (pc *PlaylistController) NewPlaylist(c *gin.Context) {
 }
 
 func (pc *PlaylistController) FindPlaylist(c *gin.Context) {
-
 }
 
 func (pc *PlaylistController) AddSong(c *gin.Context) {

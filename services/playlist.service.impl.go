@@ -30,15 +30,40 @@ func (ps *PlayServiceImpl) NewPlaylist(playlist *models.Playlist) error {
 	return err
 }
 
-func (ps *PlayServiceImpl) FindPlaylist(name *string) (*models.Playlist, error) {
-	var playlist *models.Playlist
-	query := bson.D{bson.E{Key: "playlist_name", Value: name}}
-	err := ps.playlistcollection.FindOne(ps.ctx, query).Decode(&playlist)
+func (ps *PlayServiceImpl) FindPlaylist(name *string, fun string) ([]*models.Playlist, error) {
+	var (
+		playlist   *models.Playlist
+		play_slice []*models.Playlist
+		err        error
+		query      bson.D
+		results    []bson.M
+		cursor     *mongo.Cursor
+	)
+	if fun == "one" {
+		query = bson.D{bson.E{Key: "playlist_name", Value: name}}
+		err = ps.playlistcollection.FindOne(ps.ctx, query).Decode(&playlist)
+		play_slice = append(play_slice, playlist)
+	} else {
+		query = bson.D{{}}
+		if cursor, err = ps.playlistcollection.Find(ps.ctx, query); err != nil {
+			return nil, err
+		}
+		if err = cursor.All(ps.ctx, &results); err != nil {
+			return nil, err
+		}
+		for _, result := range results {
+			var each *models.Playlist
+			bytes, _ := bson.Marshal(result)
+			bson.Unmarshal(bytes, &each)
+			play_slice = append(play_slice, each)
+		}
+	}
+
 	if err != nil {
 		fmt.Println("could not find playlist")
 		return nil, err
 	}
-	return playlist, nil
+	return play_slice, nil
 }
 
 func (ps *PlayServiceImpl) AddSong(song *models.Song, playlist_name *string) error {
