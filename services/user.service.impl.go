@@ -32,6 +32,7 @@ func (u *UserServiceImpl) CreateUser(user *models.User) error {
 	_, err := u.usercollection.InsertOne(u.ctx, user)
 	return err
 }
+
 func (u *UserServiceImpl) UserLogin(name *string, pwd string, c *gin.Context) error {
 	var user *models.User
 	query := bson.D{bson.E{Key: "username", Value: name}}

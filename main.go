@@ -73,6 +73,18 @@ func Auth(c *gin.Context) {
 	c.Next()
 }
 
+func GetCreds(c *gin.Context) {
+	session, _ := store.Get(c.Request, "session")
+	_, ok := session.Values["user"]
+
+	if !ok {
+		c.JSON(http.StatusNetworkAuthenticationRequired, gin.H{"error": "Not logged in"})
+		return
+	}
+
+	c.JSON(http.StatusAccepted, gin.H{"user": ok})
+}
+
 func main() {
 	r := gin.Default()
 	user_router := r.Group("/user", Auth)
@@ -83,10 +95,11 @@ func main() {
 			"msg": "wazzup",
 		})
 	})
-
+	r.GET("/check-login", GetCreds)
 	r.POST("/login", uc.UserLogin)
 	r.POST("/new-user", uc.CreateUser)
 	r.GET("/find-playlist/:playlistName", pc.FindPlaylist)
+	r.GET("/songs", pc.GetSongs)
 	user_router.PATCH("/update", uc.UpdateUser)
 	user_router.DELETE("/delete", uc.DeleteUser)
 	play_router.POST("/create", pc.NewPlaylist)

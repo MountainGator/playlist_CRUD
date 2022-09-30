@@ -65,6 +65,30 @@ func (ps *PlayServiceImpl) FindPlaylist(name *string, fun string) ([]*models.Pla
 	}
 	return play_slice, nil
 }
+func (ps *PlayServiceImpl) GetSongs() ([]*models.Song, error) {
+	var (
+		song_list []*models.Song
+		err       error
+		query     bson.D
+		results   []bson.M
+		cursor    *mongo.Cursor
+	)
+	query = bson.D{{}}
+	if cursor, err = ps.playlistcollection.Find(ps.ctx, query); err != nil {
+		return nil, err
+	}
+	if err = cursor.All(ps.ctx, &results); err != nil {
+		return nil, err
+	}
+	for _, result := range results {
+		var song *models.Song
+
+		bytes, _ := bson.Marshal(result)
+		bson.Unmarshal(bytes, &song)
+		song_list = append(song_list, song)
+	}
+	return song_list, nil
+}
 
 func (ps *PlayServiceImpl) AddSong(song *models.Song, playlist_name *string) error {
 	_, err := ps.songcollection.InsertOne(ps.ctx, song)

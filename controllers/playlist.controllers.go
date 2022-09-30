@@ -32,6 +32,16 @@ func (pc *PlaylistController) NewPlaylist(c *gin.Context) {
 func (pc *PlaylistController) FindPlaylist(c *gin.Context) {
 }
 
+func (pc *PlaylistController) GetSongs(c *gin.Context) {
+	song_list, err := pc.PlaylistService.GetSongs()
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"Get Songs Error": err})
+	}
+
+	c.JSON(http.StatusAccepted, gin.H{"data": song_list})
+
+}
 func (pc *PlaylistController) AddSong(c *gin.Context) {
 
 }
