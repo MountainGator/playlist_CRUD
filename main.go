@@ -32,7 +32,7 @@ var (
 )
 
 func init() {
-	if err := godotenv.Load(); err != nil {
+	if err = godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
 
@@ -77,9 +77,6 @@ func main() {
 	r := gin.Default()
 	user_router := r.Group("/user", Auth)
 	play_router := r.Group("/playlist", Auth)
-	if err != nil {
-		panic(err)
-	}
 
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusAccepted, gin.H{
