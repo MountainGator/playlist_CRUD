@@ -8,6 +8,7 @@ import (
 type UserService interface {
 	CreateUser(*models.User) error
 	UserLogin(*string, string, *gin.Context) error
+	Logout(*gin.Context) error
 	UpdateUser(*models.User) error
 	DeleteUser(*string) error
 }

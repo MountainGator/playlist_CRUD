@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
+import { DataService } from 'src/app/services/data.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -8,18 +9,20 @@ import { Subscription } from 'rxjs';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   private credSubscription!: Subscription;
   public currentUser: string = '';
-  constructor(private router: Router, private api: ApiService) { }
+  constructor(private router: Router, private api: ApiService, private data: DataService) { }
 
   ngOnInit(): void {
-
+    this.getCreds();
   }
-  public getCreds() {
-    let tempUser: string | null = localStorage.getItem("current user")
 
-    if(!tempUser) {
+  ngOnDestroy(): void {
+    this.credSubscription.unsubscribe();
+  }
+
+  public getCreds() {
       this.credSubscription = this.api.getCreds().subscribe(
         {
           next: (res: any) => {
@@ -27,7 +30,6 @@ export class HomeComponent implements OnInit {
             if (res.error){
               this.router.navigate(["/login"]);
             } else if(res.user) {
-              localStorage.setItem('current user',JSON.stringify(res.user));
               this.currentUser = res.user;
             }
           },
@@ -37,9 +39,6 @@ export class HomeComponent implements OnInit {
           }
         }
       );
-    } else {
-      this.currentUser = tempUser;
-    }
 
   }
 }

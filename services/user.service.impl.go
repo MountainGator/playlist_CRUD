@@ -55,6 +55,17 @@ func (u *UserServiceImpl) UserLogin(name *string, pwd string, c *gin.Context) er
 	session.Save(c.Request, c.Writer)
 	return nil
 }
+
+func (u *UserServiceImpl) Logout(c *gin.Context) error {
+	session, err := u.store.Get(c.Request, "session")
+	if err != nil {
+		return err
+	}
+	session.Values["user"] = nil
+	session.Save(c.Request, c.Writer)
+	return nil
+}
+
 func (u *UserServiceImpl) UpdateUser(user *models.User) error {
 	filter := bson.D{primitive.E{Key: "name", Value: user.Name}}
 	update := bson.D{

@@ -56,6 +56,9 @@ func (uc *UserController) UserLogin(c *gin.Context) {
 
 }
 
+func (uc *UserController) Logout(c *gin.Context) {
+}
+
 func (uc *UserController) UpdateUser(c *gin.Context) {
 
 }
