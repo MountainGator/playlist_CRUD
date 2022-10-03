@@ -30,7 +30,7 @@ func (ps *PlayServiceImpl) NewPlaylist(playlist *models.Playlist) error {
 	return err
 }
 
-func (ps *PlayServiceImpl) FindPlaylist(name *string, fun string) ([]*models.Playlist, error) {
+func (ps *PlayServiceImpl) FindPlaylist(name string, fun string) ([]*models.Playlist, error) {
 	var (
 		playlist   *models.Playlist
 		play_slice []*models.Playlist
@@ -128,6 +128,18 @@ func Add_to_playlist(song *models.Song, playlist_name *string, ctx context.Conte
 
 	_, e := ps.playlistcollection.UpdateOne(ctx, query, update)
 	return e
+}
+
+func (ps *PlayServiceImpl) UpdatePlaylist(data *models.Playlist) error {
+
+	play_query := bson.D{bson.E{Key: "playlist_name", Value: data.Playlist_name}}
+
+	result := ps.playlistcollection.FindOneAndReplace(ps.ctx, play_query, data)
+	if result.Err() != nil {
+		return result.Err()
+	}
+
+	return nil
 }
 
 func (ps *PlayServiceImpl) DeleteSong(name *string, artist *string, playlist_name *string) error {
