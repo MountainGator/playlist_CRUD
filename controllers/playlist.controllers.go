@@ -32,7 +32,17 @@ func (pc *PlaylistController) NewPlaylist(c *gin.Context) {
 }
 
 func (pc *PlaylistController) UpdatePlaylist(c *gin.Context) {
-
+	var playlist *models.Playlist
+	var err error
+	if err = c.BindJSON(&playlist); err != nil {
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+	if err = pc.PlaylistService.UpdatePlaylist(playlist); err != nil {
+		c.JSON(http.StatusBadRequest, err)
+		return
+	}
+	c.JSON(http.StatusAccepted, gin.H{"Success": "playlist updated"})
 }
 
 func (pc *PlaylistController) FindPlaylist(c *gin.Context) {
