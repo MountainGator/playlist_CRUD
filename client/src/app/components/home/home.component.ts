@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.credSubscription.unsubscribe();
   }
 
-  public getCreds() {
+  public getCreds(): void {
       this.credSubscription = this.api.getCreds().subscribe(
         {
           next: (res: any) => {
