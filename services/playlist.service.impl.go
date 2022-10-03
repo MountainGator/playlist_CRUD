@@ -90,18 +90,23 @@ func (ps *PlayServiceImpl) GetSongs() ([]*models.Song, error) {
 	return song_list, nil
 }
 
-func (ps *PlayServiceImpl) AddSong(song *models.Song, playlist_name *string) error {
+func (ps *PlayServiceImpl) AddSong(song *models.Song) error {
+
 	_, err := ps.songcollection.InsertOne(ps.ctx, song)
 	if err != nil {
 		return err
 	}
-	er := Add_to_playlist(song, playlist_name, ps.ctx, ps)
-	if err != nil {
-		return er
-	}
+
 	return nil
 
 }
+
+//	if f == "add" {
+//		er := Add_to_playlist(song, playlist_name, ps.ctx, ps)
+//		if er != nil {
+//			return er
+//		}
+//	}
 func Add_to_playlist(song *models.Song, playlist_name *string, ctx context.Context, ps *PlayServiceImpl) error {
 	var new_song *models.Song
 	song_q := bson.D{bson.E{Key: "artist", Value: song.Artist}, bson.E{Key: "title", Value: song.Title}}
@@ -142,9 +147,9 @@ func (ps *PlayServiceImpl) UpdatePlaylist(data *models.Playlist) error {
 	return nil
 }
 
-func (ps *PlayServiceImpl) DeleteSong(name *string, artist *string, playlist_name *string) error {
+func (ps *PlayServiceImpl) DeleteSong(id *string, playlist_id *string) error {
 	var song *models.Song
-	song_query := bson.D{bson.E{Key: "title", Value: name}, bson.E{Key: "artist", Value: artist}}
+	song_query := bson.D{bson.E{Key: "_id", Value: id}}
 	err := ps.songcollection.FindOne(ps.ctx, song_query).Decode(&song)
 
 	if err != nil {
@@ -153,7 +158,7 @@ func (ps *PlayServiceImpl) DeleteSong(name *string, artist *string, playlist_nam
 
 	var playlist *models.Playlist
 	var n00b []*models.Song
-	query := bson.D{bson.E{Key: "playlist_name", Value: name}}
+	query := bson.D{bson.E{Key: "_id", Value: playlist_id}}
 	e := ps.playlistcollection.FindOne(ps.ctx, query).Decode(&playlist)
 
 	if e != nil {
@@ -190,8 +195,8 @@ func (ps *PlayServiceImpl) DeleteSong(name *string, artist *string, playlist_nam
 	return nil
 
 }
-func (ps *PlayServiceImpl) DeletePlaylist(name *string) error {
-	query := bson.D{bson.E{Key: "playlist_name", Value: name}}
+func (ps *PlayServiceImpl) DeletePlaylist(id *string) error {
+	query := bson.D{bson.E{Key: "_id", Value: id}}
 	_, err := ps.playlistcollection.DeleteOne(ps.ctx, query)
 
 	if err != nil {

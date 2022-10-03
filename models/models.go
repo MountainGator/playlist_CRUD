@@ -27,3 +27,8 @@ type LoginInfo struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
+type DeleteSong struct {
+	SongId     string `json:"songId"`
+	PlaylistId string `json:"playlistId"`
+}
