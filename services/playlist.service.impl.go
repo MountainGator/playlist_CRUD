@@ -65,6 +65,7 @@ func (ps *PlayServiceImpl) FindPlaylist(name string, fun string) ([]*models.Play
 	}
 	return play_slice, nil
 }
+
 func (ps *PlayServiceImpl) GetSongs() ([]*models.Song, error) {
 	var (
 		song_list []*models.Song
@@ -101,12 +102,6 @@ func (ps *PlayServiceImpl) AddSong(song *models.Song) error {
 
 }
 
-//	if f == "add" {
-//		er := Add_to_playlist(song, playlist_name, ps.ctx, ps)
-//		if er != nil {
-//			return er
-//		}
-//	}
 func Add_to_playlist(song *models.Song, playlist_name *string, ctx context.Context, ps *PlayServiceImpl) error {
 	var new_song *models.Song
 	song_q := bson.D{bson.E{Key: "artist", Value: song.Artist}, bson.E{Key: "title", Value: song.Title}}
