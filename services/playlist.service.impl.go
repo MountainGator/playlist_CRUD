@@ -132,7 +132,7 @@ func Add_to_playlist(song *models.Song, playlist_name *string, ctx context.Conte
 
 func (ps *PlayServiceImpl) UpdatePlaylist(data *models.Playlist) error {
 
-	play_query := bson.D{bson.E{Key: "playlist_name", Value: data.Playlist_name}}
+	play_query := bson.D{bson.E{Key: "_id", Value: data.Id}}
 
 	result := ps.playlistcollection.FindOneAndReplace(ps.ctx, play_query, data)
 	if result.Err() != nil {
