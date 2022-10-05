@@ -78,11 +78,40 @@ func (pc *PlaylistController) GetSongs(c *gin.Context) {
 
 }
 func (pc *PlaylistController) AddSong(c *gin.Context) {
+	var song *models.Song
+
+	c.BindJSON(&song)
+
+	if err := pc.PlaylistService.AddSong(song); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
+
+	c.JSON(http.StatusAccepted, gin.H{"success": "added song"})
 
 }
+
 func (pc *PlaylistController) DeleteSong(c *gin.Context) {
+	var song *models.DeleteSong
+
+	c.BindJSON(&song)
+
+	if err := pc.PlaylistService.DeleteSong(&song.SongId, &song.PlaylistId); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+	}
+
+	c.JSON(http.StatusAccepted, gin.H{"sucess": "deleted song"})
 
 }
 func (pc *PlaylistController) DeletePlaylist(c *gin.Context) {
+	var playlist *models.Playlist
+
+	c.BindJSON(&playlist)
+
+	if err := pc.PlaylistService.DeletePlaylist(&playlist.Id); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+	}
+
+	c.JSON(http.StatusAccepted, gin.H{"sucess": "deleted playlist"})
 
 }

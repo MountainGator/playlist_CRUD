@@ -56,6 +56,16 @@ func (u *UserServiceImpl) UserLogin(name *string, pwd string, c *gin.Context) er
 	return nil
 }
 
+func (u *UserServiceImpl) GetUserDetails(user_name *string) (*models.User, error) {
+	var user *models.User
+	filter := bson.D{primitive.E{Key: "username", Value: user_name}}
+	if err := u.usercollection.FindOne(u.ctx, filter).Decode(&user); err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
 func (u *UserServiceImpl) Logout(c *gin.Context) error {
 	session, err := u.store.Get(c.Request, "session")
 	if err != nil {
