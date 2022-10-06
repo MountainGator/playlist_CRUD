@@ -32,7 +32,7 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 	}
 	user.Pwd = string(bytes)
 
-	err = uc.UserService.CreateUser(&user)
+	err = uc.UserService.CreateUser(&user, c)
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"message": err.Error()})
 		return

@@ -27,7 +27,7 @@ func NewUserService(usercollection *mongo.Collection, store *sessions.CookieStor
 	}
 }
 
-func (u *UserServiceImpl) CreateUser(user *models.User) error {
+func (u *UserServiceImpl) CreateUser(user *models.User, c *gin.Context) error {
 	var temp *models.User
 	var err error
 	query := bson.D{bson.E{Key: "username", Value: user.Username}}
@@ -36,6 +36,12 @@ func (u *UserServiceImpl) CreateUser(user *models.User) error {
 
 	if err != nil {
 		_, er := u.usercollection.InsertOne(u.ctx, user)
+		session, ses_err := u.store.Get(c.Request, "session")
+		if ses_err != nil {
+			return ses_err
+		}
+		session.Values["user"] = temp.Username
+		session.Save(c.Request, c.Writer)
 		if er != nil {
 			return er
 		}
@@ -43,9 +49,7 @@ func (u *UserServiceImpl) CreateUser(user *models.User) error {
 	} else if temp.Username == user.Username {
 		return errors.New("user already exists")
 	}
-
 	return nil
-
 }
 
 func (u *UserServiceImpl) UserLogin(name *string, pwd string, c *gin.Context) error {

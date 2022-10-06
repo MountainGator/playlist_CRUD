@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
 import {User} from "../../services/api.service";
 import { ApiService } from '../../services/api.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,15 +10,14 @@ import { ApiService } from '../../services/api.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  public login: boolean = true;
   public userCreds: User = {
     username: '',
-    email: '',
     password: ''
   }
   public create: boolean = false;
   public passwordMatch: string = '';
-  constructor(private dialog: MatDialog, private api: ApiService) { }
+  public wasError: boolean = false;
+  constructor(private dialog: MatDialog, private api: ApiService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -27,16 +27,32 @@ export class LoginComponent implements OnInit {
   }
 
   public checkPwd(): void {
-
+    this.api.login(this.userCreds).subscribe({
+      next: res => {
+        this.wasError = false;
+        this.router.navigate([""]);
+      },
+      error: e => {
+        console.error(e)
+        this.wasError = true;
+      }
+    })
   }
 
   public createUser(): void {
     if(this.userCreds.password === this.passwordMatch) {
-      this.api.createUser(this.userCreds).subscribe((res: any) => {
+      this.api.createUser(this.userCreds).subscribe({
+        next: (res: any) => {
+          this.wasError = false;
+          this.router.navigate([""])
+        },
+        error: e => {
+          console.error(e)
+          this.wasError = true;
+        }
+    })
 
-      })
-
-    } else this.dialog.open()
+    } 
   }
 
 }
