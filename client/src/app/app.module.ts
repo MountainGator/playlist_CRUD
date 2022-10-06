@@ -14,6 +14,7 @@ import { HomeComponent } from './components/home/home.component';
 import { PlaylistComponent } from './components/playlist/playlist.component';
 import { SongComponent } from './components/song/song.component';
 import { HeaderComponent } from './components/header/header.component';
+import { MsgDialogComponent } from './components/msg-dialog/msg-dialog.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HeaderComponent } from './components/header/header.component';
     HomeComponent,
     PlaylistComponent,
     SongComponent,
-    HeaderComponent
+    HeaderComponent,
+    MsgDialogComponent
   ],
   imports: [
     BrowserModule,
