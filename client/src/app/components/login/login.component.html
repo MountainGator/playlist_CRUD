@@ -4,14 +4,26 @@
             <h3>Login</h3>
             <mat-form-field appearance="outline">
                 <mat-label>Username</mat-label>
-                <input matInput type="text" [(ngModel)]="username">
+                <input matInput type="text" [(ngModel)]="userCreds.username" name="username">
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Password</mat-label>
-                <input matInput type="text" [(ngModel)]="password">
+                <input matInput type="text" [(ngModel)]="userCreds.password" name="password">
             </mat-form-field>
-            <button class="btn btn-success" (click)="checkPwd()">Login</button>
+            <mat-form-field appearance="outline" *ngIf="create">
+                <mat-label>Password</mat-label>
+                <input matInput type="text" [(ngModel)]="passwordMatch" name="password match">
+            </mat-form-field>
+            <div class="row justify-content-around" *ngIf="!create">
+                <button class="btn btn-success col-3" (click)="checkPwd()">Login</button>
+                <button class="btn btn-info col-3" (click)="toggle()">Add New</button>
+            </div>
+            <div class="row justify-content-center" *ngIf="create">
+                <button class="btn btn-info col-3" (click)="createUser()">Create User</button>
+            </div>
+
             
         </div>
+
     </div>
 </section>

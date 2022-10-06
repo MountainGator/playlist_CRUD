@@ -2,22 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 export type User = {
-  id: string | null;
-  name: string;
-  age: string;
+  [x:string]: any;
   username: string;
   email: string;
   password: string;
 }
 export type Song = {
-  id: string | null;
+  [x:string]: any;
   artist: string;
   title: string;
   album: string;
 }
 
 export type Playlist = {
-  id: string | null;
+  [x:string]: any;
   artist: string
   title: string
   album: string

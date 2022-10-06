@@ -34,7 +34,7 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 
 	err = uc.UserService.CreateUser(&user)
 	if err != nil {
-		c.JSON(http.StatusForbidden, gin.H{"message": err.Error()})
+		c.JSON(http.StatusConflict, gin.H{"message": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, user)

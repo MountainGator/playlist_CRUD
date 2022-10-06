@@ -28,9 +28,24 @@ func NewUserService(usercollection *mongo.Collection, store *sessions.CookieStor
 }
 
 func (u *UserServiceImpl) CreateUser(user *models.User) error {
+	var temp *models.User
+	var err error
+	query := bson.D{bson.E{Key: "username", Value: user.Username}}
 
-	_, err := u.usercollection.InsertOne(u.ctx, user)
-	return err
+	err = u.usercollection.FindOne(u.ctx, query).Decode(&temp)
+
+	if err != nil {
+		_, er := u.usercollection.InsertOne(u.ctx, user)
+		if er != nil {
+			return er
+		}
+
+	} else if temp.Username == user.Username {
+		return errors.New("user already exists")
+	}
+
+	return nil
+
 }
 
 func (u *UserServiceImpl) UserLogin(name *string, pwd string, c *gin.Context) error {
@@ -77,15 +92,12 @@ func (u *UserServiceImpl) Logout(c *gin.Context) error {
 }
 
 func (u *UserServiceImpl) UpdateUser(user *models.User) error {
-	filter := bson.D{primitive.E{Key: "name", Value: user.Name}}
+	filter := bson.D{primitive.E{Key: "_id", Value: user.Id}}
 	update := bson.D{
 		primitive.E{
 			Key: "$set",
 			Value: bson.D{
-				primitive.E{Key: "name", Value: user.Name},
-				primitive.E{Key: "age", Value: user.Age},
 				primitive.E{Key: "username", Value: user.Username},
-				primitive.E{Key: "email", Value: user.Email},
 			},
 		},
 	}
