@@ -92,11 +92,11 @@ func (pc *PlaylistController) AddSong(c *gin.Context) {
 }
 
 func (pc *PlaylistController) DeleteSong(c *gin.Context) {
-	var song *models.DeleteSong
+	song := c.Param("id")
 
 	c.BindJSON(&song)
 
-	if err := pc.PlaylistService.DeleteSong(&song.SongId, &song.PlaylistId); err != nil {
+	if err := pc.PlaylistService.DeleteSong(&song); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 
@@ -104,11 +104,9 @@ func (pc *PlaylistController) DeleteSong(c *gin.Context) {
 
 }
 func (pc *PlaylistController) DeletePlaylist(c *gin.Context) {
-	var playlist *models.Playlist
+	id := c.Param("id")
 
-	c.BindJSON(&playlist)
-
-	if err := pc.PlaylistService.DeletePlaylist(&playlist.Id); err != nil {
+	if err := pc.PlaylistService.DeletePlaylist(&id); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 

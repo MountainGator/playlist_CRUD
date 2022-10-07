@@ -149,7 +149,7 @@ func (ps *PlayServiceImpl) UpdatePlaylist(data *models.Playlist) error {
 	return nil
 }
 
-func (ps *PlayServiceImpl) DeleteSong(id *string, playlist_id *string) error {
+func (ps *PlayServiceImpl) DeleteSong(id *string) error {
 	var song *models.Song
 	song_query := bson.D{bson.E{Key: "_id", Value: id}}
 	err := ps.songcollection.FindOne(ps.ctx, song_query).Decode(&song)
@@ -158,35 +158,35 @@ func (ps *PlayServiceImpl) DeleteSong(id *string, playlist_id *string) error {
 		return err
 	}
 
-	var playlist *models.Playlist
-	var n00b []*models.Song
-	query := bson.D{bson.E{Key: "_id", Value: playlist_id}}
-	e := ps.playlistcollection.FindOne(ps.ctx, query).Decode(&playlist)
+	// var playlist *models.Playlist
+	// var n00b []*models.Song
+	// query := bson.D{bson.E{Key: "_id", Value: playlist_id}}
+	// e := ps.playlistcollection.FindOne(ps.ctx, query).Decode(&playlist)
 
-	if e != nil {
-		return e
-	}
+	// if e != nil {
+	// 	return e
+	// }
 
-	for _, each := range playlist.Songs {
-		if each.Title != song.Title && each.Artist != song.Artist {
-			n00b = append(n00b, each)
-		}
-	}
+	// for _, each := range playlist.Songs {
+	// 	if each.Title != song.Title && each.Artist != song.Artist {
+	// 		n00b = append(n00b, each)
+	// 	}
+	// }
 
-	update := bson.D{
-		primitive.E{
-			Key: "$set",
-			Value: bson.D{
-				primitive.E{Key: "songs", Value: n00b},
-			},
-		},
-	}
+	// update := bson.D{
+	// 	primitive.E{
+	// 		Key: "$set",
+	// 		Value: bson.D{
+	// 			primitive.E{Key: "songs", Value: n00b},
+	// 		},
+	// 	},
+	// }
 
-	_, new_err := ps.playlistcollection.UpdateOne(ps.ctx, query, update)
+	// _, new_err := ps.playlistcollection.UpdateOne(ps.ctx, query, update)
 
-	if new_err != nil {
-		return new_err
-	}
+	// if new_err != nil {
+	// 	return new_err
+	// }
 
 	_, er := ps.songcollection.DeleteOne(ps.ctx, song_query)
 

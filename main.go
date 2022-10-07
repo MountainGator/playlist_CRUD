@@ -106,8 +106,8 @@ func main() {
 	play_router.GET("/get-all/:username", pc.GetAllPlaylist)
 	play_router.POST("/add-song", pc.AddSong)
 	play_router.PATCH("/update", pc.UpdatePlaylist)
-	play_router.DELETE("/delete-song", pc.DeleteSong)
-	play_router.DELETE("/delete", pc.DeletePlaylist)
+	play_router.DELETE("/delete-song/:id", pc.DeleteSong)
+	play_router.DELETE("/delete/:id", pc.DeletePlaylist)
 
 	r.Use(cors.Default())
 	r.Run()

@@ -29,6 +29,8 @@ export type LoginCreds = {
 })
 export class ApiService {
 
+  private playHost: string = "localhost:5000/playlist/"
+
   constructor(private http: HttpClient) { }
 
   public getCreds() {
@@ -42,4 +44,34 @@ export class ApiService {
   public createUser(newUser: User) {
     return this.http.post("localhost:5000/new-user", newUser)
   }
+
+  public addPlaylist(playlist: Playlist) {
+    return this.http.post(this.playHost + 'create', playlist)
+  }
+
+  public getSinglePlaylist(playlistName: string) {
+    return this.http.get("localhost:5000/find-playlist/" + playlistName )
+  }
+
+  public getAllUserPlaylists(username: string) {
+    return this.http.get(this.playHost + "get-all/" + username);
+  }
+
+  public getAllSongs() {
+    return this.http.get("localhost:5000/songs");
+  }
+
+  public addSong(song: Song) {
+    return this.http.post(this.playHost + "add-song", song);
+  }
+
+  public deletePlaylist(playId: string) {
+    return this.http.delete(this.playHost + "delete" + playId)
+  }
+
+  public deleteSong(id: string) {
+    return this.http.delete(this.playHost + "delete-song" + id)
+  }
+
+
 }

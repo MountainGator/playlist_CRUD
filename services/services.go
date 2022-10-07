@@ -21,6 +21,6 @@ type PlaylistService interface {
 	GetSongs() ([]*models.Song, error)
 	AddSong(*models.Song) error
 	UpdatePlaylist(*models.Playlist) error
-	DeleteSong(*string, *string) error
+	DeleteSong(*string) error
 	DeletePlaylist(*string) error
 }
