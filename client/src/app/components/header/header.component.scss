@@ -1,0 +1,26 @@
+header {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    padding-top: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#header-line {
+    width: 800px;
+    height: 3px;
+    background-color: #123123;
+}
+
+h1 {
+    font-size: 3rem;
+    color: #000000;
+    margin-bottom:0;
+}
+
+.active {
+    text-decoration: none;
+}

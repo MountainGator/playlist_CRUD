@@ -48,15 +48,13 @@ func (pc *PlaylistController) UpdatePlaylist(c *gin.Context) {
 func (pc *PlaylistController) FindPlaylist(c *gin.Context) {
 	var (
 		playlist_name string
-		fun           string
 		play_List     []*models.Playlist
 		err           error
 	)
 
 	playlist_name = c.Param("playlist")
-	fun = c.Param("fun")
 
-	play_List, err = pc.PlaylistService.FindPlaylist(playlist_name, fun)
+	play_List, err = pc.PlaylistService.FindPlaylist(playlist_name)
 
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error finding playlist": err})
@@ -66,7 +64,9 @@ func (pc *PlaylistController) FindPlaylist(c *gin.Context) {
 	c.JSON(http.StatusAccepted, gin.H{"playlist data": play_List})
 
 }
+func (pc *PlaylistController) GetAllPlaylist(c *gin.Context) {
 
+}
 func (pc *PlaylistController) GetSongs(c *gin.Context) {
 	song_list, err := pc.PlaylistService.GetSongs()
 

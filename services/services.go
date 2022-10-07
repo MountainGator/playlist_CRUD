@@ -16,7 +16,8 @@ type UserService interface {
 
 type PlaylistService interface {
 	NewPlaylist(*models.Playlist) error
-	FindPlaylist(string, string) ([]*models.Playlist, error)
+	FindPlaylist(string) ([]*models.Playlist, error)
+	GetAllPlaylist(*string) ([]*models.Playlist, error)
 	GetSongs() ([]*models.Song, error)
 	AddSong(*models.Song) error
 	UpdatePlaylist(*models.Playlist) error

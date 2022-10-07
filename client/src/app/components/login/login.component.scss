@@ -2,3 +2,15 @@ mat-form-field {
     width: 300px;
     margin: auto;
 }
+
+#backlink {
+    cursor: pointer;
+    margin:auto;
+    align-self: center;
+    color: #48a6f7;
+    width: 85px;
+}
+
+#backlink:hover {
+    color: #b2d7f7;
+}

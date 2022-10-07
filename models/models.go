@@ -16,7 +16,7 @@ type Song struct {
 type Playlist struct {
 	Id            string  `json:"id" bson:"_id"`
 	Creator_Id    string  `json:"creatorid" bson:"creator_id"`
-	Playlist_name string  `json:"playlist_name" bson:"playlist_name"`
+	Playlist_name string  `json:"playlistName" bson:"playlist_name"`
 	Songs         []*Song `json:"songs" bson:"songs"`
 }
 

@@ -15,9 +15,6 @@ export type Song = {
 
 export type Playlist = {
   [x:string]: any;
-  artist: string
-  title: string
-  album: string
   creator: string
   playlist_name: string
   songs: Song[]

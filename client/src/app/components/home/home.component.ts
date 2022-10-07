@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
 import { DataService } from 'src/app/services/data.service';
 import { Subscription } from 'rxjs';
+import { Playlist, Song } from 'src/app/services/api.service';
+
 
 @Component({
   selector: 'app-home',
@@ -12,6 +14,10 @@ import { Subscription } from 'rxjs';
 export class HomeComponent implements OnInit, OnDestroy {
   private credSubscription!: Subscription;
   public currentUser: string = '';
+
+  public playList: Playlist[] = [];
+  public songsList: Song[] = [];
+
   constructor(private router: Router, private api: ApiService, private data: DataService) { }
 
   ngOnInit(): void {
