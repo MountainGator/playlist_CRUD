@@ -7,6 +7,8 @@ import { MatDialogModule} from "@angular/material/dialog";
 import { FormsModule } from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -34,7 +36,8 @@ import { MsgDialogComponent } from './components/msg-dialog/msg-dialog.component
     MatDialogModule,
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]
