@@ -1,1 +1,79 @@
-<p>home works!</p>
+<section class="container">
+    <div class="row mt-2 mb-4 text-center">
+        <h2>Welcome {{currentUser}}</h2>
+    </div>
+    <div class="row justify-content-start">
+        <h3>{{currentUser}}'s Playlists</h3>
+    </div>
+    <div class="row justify-content-start" *ngIf="playList.length > 0">
+        <div *ngFor="let playlist of playList" class="col">
+            <h4 class="row" (click)="toggleEdit(playlist.playlist_name)">{{playlist.playlist_name}}</h4>
+            <ng-container *ngIf="edit && currPlayName === playlist.playlist_name">
+                <div class="row justify-content-start" *ngFor="let song of playlist.songs">
+                    <h4 class="col-8 justify-content-around">{{song.title}} - {{song.artist}}</h4>
+                    <mat-icon class="col-2" (click)="addSubtractPlaylist('add', song)">add</mat-icon>
+                    <mat-icon class="col-2" (click)="addSubtractPlaylist('remove', song)">remove</mat-icon>
+                </div>
+            </ng-container>
+            
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <h4>Create Playlist</h4>
+        </div>
+        <mat-form-field appearance="legacy">
+            <mat-label>Song Name</mat-label>
+            <input matInput type="text" name="playlist-name" [(ngModel)]="newPlaylist['playlist_name']">
+        </mat-form-field>
+    </div>
+
+    <div class="row justify-content-start">
+        <table class="table table-borderless table-secondary">
+            <thead>
+                <tr>
+                    <th>Song Name</th>
+                    <th>Artist</th>
+                    <th>Album</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <mat-form-field appearance="legacy">
+                            <mat-label>Song Name</mat-label>
+                            <input matInput type="text" name="title" [(ngModel)]="newSong.title">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="legacy">
+                            <mat-label>Song Name</mat-label>
+                            <input matInput type="text" name="artist" [(ngModel)]="newSong.artist">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field appearance="legacy">
+                            <mat-label>Song Name</mat-label>
+                            <input matInput type="text" name="album" [(ngModel)]="newSong.album">
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-icon (click)="addSong()">add</mat-icon>
+                    </td>
+                </tr>
+                <tr *ngFor="let song of songsList">
+                    <td>{{song.title}}</td>
+                    <td>{{song.artist}}</td>
+                    <td>{{song.album}}</td>
+                    <td>
+                        <mat-icon (click)="addSubtractPlaylist('add', song)">add</mat-icon>
+                    </td>
+                    <td>
+                        <mat-icon (click)="deleteSong(song['id'])">remove</mat-icon>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

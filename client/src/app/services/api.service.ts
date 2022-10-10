@@ -65,12 +65,16 @@ export class ApiService {
     return this.http.post(this.playHost + "add-song", song);
   }
 
+  public updatePlaylist(update: {id: string, playlist: Playlist}) {
+    return this.http.patch(this.playHost + "update", update);
+  }
+
   public deletePlaylist(playId: string) {
-    return this.http.delete(this.playHost + "delete" + playId)
+    return this.http.delete(this.playHost + "delete/" + playId)
   }
 
   public deleteSong(id: string) {
-    return this.http.delete(this.playHost + "delete-song" + id)
+    return this.http.delete(this.playHost + "delete-song/" + id)
   }
 
 

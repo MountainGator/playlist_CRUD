@@ -8,7 +8,8 @@ import { FormsModule } from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatTooltipModule} from '@angular/material/tooltip';
-
+import {MatIconModule} from '@angular/material/icon';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -17,6 +18,8 @@ import { PlaylistComponent } from './components/playlist/playlist.component';
 import { SongComponent } from './components/song/song.component';
 import { HeaderComponent } from './components/header/header.component';
 import { MsgDialogComponent } from './components/msg-dialog/msg-dialog.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { AddSongDialogComponent } from './components/add-song-dialog/add-song-dialog.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,9 @@ import { MsgDialogComponent } from './components/msg-dialog/msg-dialog.component
     PlaylistComponent,
     SongComponent,
     HeaderComponent,
-    MsgDialogComponent
+    MsgDialogComponent,
+    ConfirmDialogComponent,
+    AddSongDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +42,9 @@ import { MsgDialogComponent } from './components/msg-dialog/msg-dialog.component
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatIconModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

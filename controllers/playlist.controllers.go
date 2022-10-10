@@ -65,8 +65,18 @@ func (pc *PlaylistController) FindPlaylist(c *gin.Context) {
 
 }
 func (pc *PlaylistController) GetAllPlaylist(c *gin.Context) {
+	creator := c.Param("username")
 
+	play_slice, err := pc.PlaylistService.GetAllPlaylist(&creator)
+
+	if err != nil {
+		c.JSON(http.StatusExpectationFailed, gin.H{"error finding playlists": err})
+		return
+	}
+
+	c.JSON(http.StatusAccepted, gin.H{"data": play_slice})
 }
+
 func (pc *PlaylistController) GetSongs(c *gin.Context) {
 	song_list, err := pc.PlaylistService.GetSongs()
 

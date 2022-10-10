@@ -1,0 +1,5 @@
+<section class="container-fluid" mat-dialog-content>
+    <div class="row" *ngFor="let playlist of data.list">
+        <h4 (click)="updatePlaylist(playlist.playlist_name)">{{playlist.playlist_name}}</h4>
+    </div>
+</section>

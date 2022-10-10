@@ -34,3 +34,17 @@ $angularWebsiteC-theme: mat.define-light-theme((
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.success-bar {
+  background-color: $success !important;
+  color: white !important;
+  font-weight: 500 !important;
+  font-size: 2rem !important;
+}
+
+.danger-bar {
+  background-color: $danger !important;
+  color: white !important;
+  font-weight: 500 !important;
+  font-size: 2rem !important;
+}
